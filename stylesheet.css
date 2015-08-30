@@ -1,0 +1,25 @@
+body {
+  font-family: Georgia, serif;
+  font-size: 20px;
+  line-height: 1.7em;
+  letter-spacing: 0.05em;
+}
+
+#content, .nav {
+  max-width: 35em;
+  margin: auto;
+}
+
+#content img {
+  display: block;
+  margin: auto;
+}
+
+.nav {
+  text-align: right;
+}
+
+h1 {
+  text-align: center;
+  margin: 2.5em 0 2em 0;
+}
