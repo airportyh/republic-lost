@@ -7,6 +7,7 @@ var mkdirp = require('mkdirp');
 var path = require('path');
 var cheerio = require('cheerio');
 var slug = require('slug');
+var allLinks = require('./links');
 
 epub.on('end', function() {
   build(epub);
@@ -25,6 +26,9 @@ function build(epub) {
       addBreadCrumbs(pages);
       makeTOCTitleBig(pages);
       adjustTitleSizes(pages);
+      substituteLinks(pages.filter(function(p) {
+        return p.id === 'notes.html';
+      })[0]);
       writePages(pages, function(err) {
         if (err) return console.error(err);
         console.log('done');
@@ -233,6 +237,22 @@ function addBreadCrumbs(pages) {
     while (!isSection(pages[idx])) idx--;
     return pages[idx];
   }
+}
+
+function substituteLinks(page) {
+  var $ = page.$;
+  $('p').each(function() {
+    var newHTML = $(this).html().replace(/(:?\#[0-9]+)|(:?\$39)/g, function(text) {
+      var n = text.substring(1);
+      var links = allLinks[n].links
+      var ret = `<a href="${links[0].href}">#${n}</a>`;
+      if (links.length > 1) {
+        ret += ` <a href="${links[1].href}">(cache)</a>`;
+      }
+      return ret;
+    });
+    $(this).html(newHTML);
+  });
 }
 
 function template(text) {
