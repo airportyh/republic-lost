@@ -23,3 +23,10 @@ h1 {
   text-align: center;
   margin: 2.5em 0 2em 0;
 }
+
+.block-link {
+  display: block;
+  background-color: #ccc;
+  text-align: center;
+}
+
