@@ -189,7 +189,7 @@ function adjustTitleSizes(pages) {
       page.$('h1').replaceWith('');
       page.$('h2').replaceWith(
         `<h1>
-          <span class="part_num">${partNum}. </span>
+          <div class="part_num">${partNum}. </div>
           ${page.$('h2').text()}
         </h1>`
       );
