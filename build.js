@@ -22,6 +22,7 @@ function build(epub) {
       pages.forEach(rewriteImagesSrc);
       rewriteAnchorsHref(pages);
       addNavLinks(pages);
+      makeTOCTitleBig(pages);
       writePages(pages, function(err) {
         if (err) return console.error(err);
         console.log('done');
@@ -156,6 +157,14 @@ function addNavLinks(pages) {
     if (next) {
       page.$('.next-link').attr('href', next.filename);
     }
+  });
+}
+
+function makeTOCTitleBig(pages) {
+  pages.forEach(function(page) {
+    page.$('.sgc-toc-title').replaceWith(
+      '<h1>Table of Contents</h1>'
+    );
   });
 }
 
