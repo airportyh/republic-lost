@@ -213,7 +213,7 @@ function addBreadCrumbs(pages) {
     var $ = page.$;
     $('body').prepend(
       `<div id="breadcrumbs">
-        <a id="site-logo" href="index.html">Republic, Lost</a>
+        <a id="site-logo" href="/">Republic, Lost</a>
         &raquo;
       </div>
       `);
