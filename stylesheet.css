@@ -54,3 +54,9 @@ h1 {
 #breadcrumbs a:hover {
   text-decoration: underline;
 }
+
+@media (max-device-width: 640px) {
+  .nav {
+    text-align: center;
+  }
+}
