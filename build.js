@@ -22,6 +22,7 @@ function build(epub) {
       pages.forEach(rewriteImagesSrc);
       rewriteAnchorsHref(pages);
       addNavLinks(pages);
+      addBreadCrumbs(pages);
       makeTOCTitleBig(pages);
       adjustTitleSizes(pages);
       writePages(pages, function(err) {
@@ -140,16 +141,16 @@ function addNavLinks(pages) {
     if (page.filename === 'contents.html') return;
     page.$('body').prepend(
       `<div id="nav-top" class="nav">
-  <a class="prev-link">Previous</a> |
-  <a class="toc-link" href="contents.html">Contents</a> |
-  <a class="next-link">Next</a>
-</div>`)
+        <a class="prev-link">Previous</a> |
+        <a class="toc-link" href="contents.html">Contents</a> |
+        <a class="next-link">Next</a>
+      </div>`)
     page.$('body').append(
       `<div id="nav-bottom" class="nav">
-  <a class="prev-link">Previous</a> |
-  <a class="toc-link" href="contents.html">Contents</a> |
-  <a class="next-link">Next</a>
-</div>`)
+        <a class="prev-link">Previous</a> |
+        <a class="toc-link" href="contents.html">Contents</a> |
+        <a class="next-link">Next</a>
+      </div>`)
     var prev = idx === 0 ? null : pages[idx - 1];
     var next = idx === lastPage ? null : pages[idx + 1];
     if (prev) {
@@ -169,10 +170,17 @@ function makeTOCTitleBig(pages) {
   });
 }
 
+function isChapter(page) {
+  return page.$('h3').length > 0;
+}
+
+function isSection(page) {
+  return page.$('h2').length > 0;
+}
+
 function adjustTitleSizes(pages) {
   pages.forEach(function(page) {
-    var isChapter = page.$('h3').length > 0;
-    if (isChapter) {
+    if (isChapter(page)) {
       var chapterNum = page.$('h1').text();
       page.$('h1').replaceWith('');
       page.$('h3').replaceWith(
@@ -183,8 +191,7 @@ function adjustTitleSizes(pages) {
       );
       return;
     }
-    var isSection = page.$('h2').length > 0;
-    if (isSection) {
+    if (isSection(page)) {
       var partNum = page.$('h1').text();
       page.$('h1').replaceWith('');
       page.$('h2').replaceWith(
@@ -195,6 +202,37 @@ function adjustTitleSizes(pages) {
       );
     }
   });
+}
+
+function addBreadCrumbs(pages) {
+  pages.forEach(function(page, idx) {
+    var $ = page.$;
+    $('body').prepend(
+      `<div id="breadcrumbs">
+        <a id="site-logo" href="index.html">Republic, Lost</a>
+        &raquo;
+      </div>
+      `);
+    if (isChapter(page)) {
+      var parent = findParent(idx);
+      $('#breadcrumbs').append(
+        `<a href="${parent.filename}">${parent.title}</a> &raquo; `
+      );
+
+      $('#breadcrumbs').append(
+        `</span>${page.title}</span>`
+      );
+    } else {
+      $('#breadcrumbs').append(
+        `</span>${page.title}</span>`
+      );
+    }
+  });
+
+  function findParent(idx) {
+    while (!isSection(pages[idx])) idx--;
+    return pages[idx];
+  }
 }
 
 function template(text) {

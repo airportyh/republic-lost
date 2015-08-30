@@ -38,3 +38,19 @@ h1 {
   color: #888;
   font-size: 0.7em;
 }
+
+#breadcrumbs {
+  background-color: #222;
+  color: #eee;
+}
+
+#breadcrumbs a {
+  color: #eee;
+  padding: 0 5px;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+#breadcrumbs a:hover {
+  text-decoration: underline;
+}
