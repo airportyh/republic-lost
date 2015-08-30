@@ -1,6 +1,6 @@
 # Republic Lost
 
-Online version of Republic, Lost by Lawrence Lessig.
+Online version of *Republic, Lost* by Lawrence Lessig.
 
 ## Read
 
