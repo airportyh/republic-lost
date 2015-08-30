@@ -23,6 +23,7 @@ function build(epub) {
       rewriteAnchorsHref(pages);
       addNavLinks(pages);
       makeTOCTitleBig(pages);
+      adjustTitleSizes(pages);
       writePages(pages, function(err) {
         if (err) return console.error(err);
         console.log('done');
@@ -165,6 +166,34 @@ function makeTOCTitleBig(pages) {
     page.$('.sgc-toc-title').replaceWith(
       '<h1>Table of Contents</h1>'
     );
+  });
+}
+
+function adjustTitleSizes(pages) {
+  pages.forEach(function(page) {
+    var isChapter = page.$('h3').length > 0;
+    if (isChapter) {
+      var chapterNum = page.$('h1').text();
+      page.$('h1').replaceWith('');
+      page.$('h3').replaceWith(
+        `<h1>
+          <div class="chap_num">${chapterNum}</div>
+          ${page.$('h3').text()}
+        </h1>`
+      );
+      return;
+    }
+    var isSection = page.$('h2').length > 0;
+    if (isSection) {
+      var partNum = page.$('h1').text();
+      page.$('h1').replaceWith('');
+      page.$('h2').replaceWith(
+        `<h1>
+          <span class="part_num">${partNum}. </span>
+          ${page.$('h2').text()}
+        </h1>`
+      );
+    }
   });
 }
 
